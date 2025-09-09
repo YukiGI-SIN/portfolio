@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Mon portfolio">
+  <title>Portfolio SIN</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Arrière-plan -->
+  <div class="retro-grid"></div>
+
+  <!-- Contenu Principal -->
+  <div class="main-container">
+    <!-- En-tête -->
+   <header class="header">
+  <h1 class="title">S.I.N</h1>
+  <button class="admin-btn" onclick="adminLogin()">Admin</button>
+  <p class="subtitle">Systèmes d'Information et Numérique</p>
+</header>
+
+    <!-- Interface principale -->
+    <div class="main-interface">
+      <div class="left-panel" id="left-panel">
+        <div class="control-panel">
+          <button class="retro-btn" onclick="loadJournal()">JOURNAL DE BORD</button>
+          <button class="retro-btn" onclick="loadProjets()">PROJET/REALISATION</button>
+          <button class="retro-btn" onclick="loadDossier()">DOSSIER TECHNIQUE</button>
+          <button class="retro-btn" onclick="loadContact()">A PROPOS/CONTACT</button>
+        </div>
+      </div>
+
+      <div class="center-panel">
+        <div class="hologram" id="infos">
+          <h2>INFOS</h2>
+          <div class="status">
+            <div>
+              <button class="status-btn" id="btn-sti2d" onclick="showSTI2D()">STI2D c'est quoi ?</button>
+            </div>
+            <div>
+              <button class="status-btn" id="btn-projets" onclick="showProjetsperso()">Mes Projets perso</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Zone de contenu dynamique -->
+    <div id="content-area" style="display:none;"></div>
+
+    <!-- Footer -->
+    <footer class="footer">
+      © Portfolio - S.I.N v0.5
+    </footer>
+  </div>
+
+  <!-- JavaScript -->
+  <script src="script.js"></script>
+</body>
+</html>
