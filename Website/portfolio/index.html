@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0b0e12; --panel:#11151b; --panel-2:#0f1318; --line:#202832;
+  --txt:#dce7ff; --muted:#7f93b1; --accent-red:#ff2e2e; --accent-amber:#ffc531;
+  --accent-green:#aa0202; --accent-cyan:#680505; --shadow:0 10px 25px rgba(0,0,0,.35);
+  --glow-red:0 0 12px rgba(255,46,46,.5); --glow-green:0 0 12px rgba(77, 6, 6, 0.5);
+  --glow-amber:0 0 12px rgba(255,197,49,.5); --glow-cyan:0 0 12px rgba(255, 39, 39, 0.5);
+  --radius:14px;
+}
+*{box-sizing:border-box;}
+html,body{height:100%;margin:0;font-family:"Orbitron",system-ui,sans-serif;letter-spacing:.4px;
+  background: radial-gradient(1200px 500px at 50% -10%, rgba(0,0,0,.08), transparent 0%),
+              linear-gradient(180deg, #000000 0%, #000000 100%);
+  color:var(--txt);
+}
+.wrap{max-width:1200px;margin:24px auto;padding:16px;}
+header.top{display:flex;align-items:baseline;justify-content:space-between;padding:16px 20px;
+  background:linear-gradient(180deg,var(--panel),var(--panel-2));
+  border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);}
+header.top h1{margin:0;font-weight:800;letter-spacing:2px;color:#fff;}
+header.top .subtitle{margin:0;color:var(--muted);font-weight:600;font-size:14px;}
+
+.grid{display:grid;grid-template-columns:300px 1fr 320px;gap:16px;margin-top:16px;}
+.panel{background:linear-gradient(180deg,var(--panel),var(--panel-2));border:1px solid var(--line);
+  border-radius:var(--radius);box-shadow:var(--shadow);padding:16px;position:relative;overflow:hidden;}
+.panel:before{content:"";position:absolute;inset:0;background:linear-gradient(135deg, rgba(255,255,255,.06), transparent 30% 70%, rgba(255,255,255,.02));pointer-events:none;}
+.panel h3{margin:0 0 12px;font-size:14px;font-weight:800;letter-spacing:1px;color:#fff;}
+.divider{height:1px;background:linear-gradient(90deg, transparent, var(--line), transparent);margin:12px 0;}
+
+.row{display:flex;align-items:center;justify-content:space-between;padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:rgba(255,255,255,.02);margin-bottom:8px;}
+.label{color:var(--muted);font-weight:600;font-size:12px;}
+.value{font-weight:800;font-size:13px;}
+
+.badge{display:inline-flex;align-items:center;gap:8px;padding:6px 10px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.03);font-size:12px;font-weight:700;}
+.led{width:10px;height:10px;border-radius:50%;box-shadow:0 0 0 2px rgba(255,255,255,.05) inset;}
+.led.red{background:var(--accent-red);box-shadow:var(--glow-red);}
+.led.green{background:var(--accent-green);box-shadow:var(--glow-green);}
+.led.amber{background:var(--accent-amber);box-shadow:var(--glow-amber);}
+.led.cyan{background:var(--accent-cyan);box-shadow:var(--glow-cyan);}
+
+.btns{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px;}
+.btns.center{grid-template-columns:repeat(4,1fr);}
+button.ui{appearance:none;border:none;cursor:pointer;padding:10px 12px;border-radius:10px;font-weight:800;letter-spacing:.6px;color:#0b0e12;background:linear-gradient(180deg,#fdfdfd,#cfd9e6);border:1px solid #95a7c2;box-shadow:0 4px 0 #7b8ca6,0 0 0 3px rgba(39,210,255,.0),inset 0 -8px 12px rgba(0,0,0,.06);transition:transform .05s ease,box-shadow .2s ease,background .2s ease;}
+button.ui:active{transform:translateY(2px);box-shadow:0 2px 0 #7b8ca6,inset 0 -4px 8px rgba(0,0,0,.1);}
+button.ui.red{background:linear-gradient(180deg,#ff8a8a,#ff2e2e);color:#fff;border-color:#c41f1f;box-shadow:0 6px 0 #ff0000,var(--glow-red);}
+button.ui.amber{background:linear-gradient(180deg,#bb2626,#a01818);color:#ffffff;border-color:#dd1e1e;box-shadow:0 6px 0 #ff0000,var(--glow-red);}
+button.ui.green{background:linear-gradient(180deg,#750a0a,#5c0c0c);color:#ffffff;border-color:#ad3b3b;box-shadow:0 6px 0 #ff0000,var(--glow-red);}
+button.ui.cyan{background:linear-gradient(180deg,#ff0000,#4e0000);color:#ffffff;border-color:#4d1010;box-shadow:0 6px 0 #ff0000,var(--glow-red);}
+
+.tile{padding:14px;border:1px solid var(--line);border-radius:12px;background:rgba(255,255,255,.02);}
+.tile .k{color:var(--muted);font-size:12px;font-weight:600;}
+.tile .v{margin-top:6px;font-size:22px;font-weight:800;letter-spacing:1px;}
+
+.speed-wrap{margin-top:12px;}
+.bar{height:14px;border-radius:999px;border:1px solid var(--line);background:linear-gradient(90deg, rgba(255,46,46,.25), rgb(255, 0, 0), rgba(129, 12, 12, 0.25));overflow:hidden;}
+.bar>.fill{height:100%;width:0%;background:linear-gradient(90deg,var(--accent-red),var(--accent-amber),var(--accent-green));box-shadow:0 0 16px rgba(33,230,111,.35);transition:width .4s cubic-bezier(.2,.7,.2,1);}
+
+.scanner{position:relative;height:12px;margin:12px 0 2px;background:radial-gradient(ellipse at center, rgba(255,255,255,.05), transparent 60%);border:1px solid var(--line);border-radius:999px;overflow:hidden;}
+.scanner .dot{position:absolute;top:1px;bottom:1px;width:60px;border-radius:999px;background:radial-gradient(circle at 30% 50%, #fff 0%, #ff6a6a 18%, #ff2e2e 45%, rgba(255,46,46,.4) 70%, transparent 72%);filter:blur(.2px);animation:kitt 2.4s ease-in-out infinite;box-shadow:0 0 22px rgba(255,46,46,.85), inset 0 0 12px rgba(255,46,46,.65);}
+@keyframes kitt{0%{left:2px;}50%{left:calc(100% - 62px);}100%{left:2px;}}
+
+.foot{margin-top:16px;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;color:var(--muted);font-size:12px;border:1px solid var(--line);border-radius:12px;background:rgba(255,255,255,.02);position:sticky;bottom:0;}
+
+.info-page{display:none;}
+
+#voice-gif-wrapper {
+  position: fixed;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 300px;
+  height: 150px;
+  pointer-events: none;
+}
+#voice-gif-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+header.top {
+  display: flex;
+  justify-content: space-between; /* badge à droite */
+  align-items: center;            /* centre verticalement */
+  padding: 16px 20px;
+  background: linear-gradient(180deg, var(--panel), var(--panel-2));
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+
+/* Conteneur du titre centré horizontalement */
+header.top .title-container {
+  flex: 1;               /* prend tout l’espace disponible */
+  display: flex;
+  flex-direction: column;
+  align-items: center;   /* centre horizontalement */
+  justify-content: center;
+  text-align: center;
+}
+
+/* Footer centré */
+.foot {
+  margin-top: 16px;
+  padding: 10px 14px;
+  display: flex;
+  justify-content: center; /* centre le texte horizontalement */
+  align-items: center;     /* centre verticalement */
+  color: var(--muted);
+  font-size: 12px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, .02);
+  position: sticky;
+  bottom: 0;
+}
+.highlight {
+  color: #ff2e2e; /* Couleur de la lettre choisie */
+  font-weight: 700; /* facultatif */
+}
+.red-text {
+  color: #ff2e2e; /* rouge vif */
+  font-weight: 800; /* facultatif pour garder le style */
+}
+
+
+@media(max-width:1100px){.grid{grid-template-columns:260px 1fr;}.right{grid-column:1 / -1;}}
+@media(max-width:720px){.grid{grid-template-columns:1fr;}.btns.center{grid-template-columns:repeat(2,1fr);}}
+</style>
+</head>
+<body>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+<div class="wrap">
+
+  <!-- Header -->
+   
+<header class="top">
+  <div class="title-container">
+    <h1><span style="color:#700101;">S.I.N</span></h1>
+    <p class="subtitle">Synthèse d'Intelligence Numérique</p>
+  </div>
+   <div class="badge">
+    <span class="led green" id="led-system"></span>
+    <button id="admin-btn" class="ui cyan">Admin</button>
+  </div>
+</header>
+
+  <!-- Grille principale -->
+  <div class="grid">
+    <!-- Panneau gauche -->
+    <section class="panel left">
+      <div class="section-title">
+       <h3><span style="color:#700101;">PANNEAU SECONDAIRE</span></h3>
+        <span class="tag">Classe STI2D</span>
+      </div>
+      <div class="scanner"><div class="dot"></div></div>
+      <div class="row">
+    <span class="label"><span class="highlight">C</span>lasse</span>
+     <span class="value" id="sys-val">Terminale</span>
+    </div>
+      <div class="row">
+      <span class="label"><span class="highlight">I</span>nspiration site</span>
+    <span class="value" id="engine-val">K2000</span>
+    </div>
+      <div class="row">
+        <span class="label"><span class="highlight">A</span>ide code</span>
+        <span class="value" id="fuel-val">IA ( chat gpt, copilot )</span>
+      </div>
+      <div class="row">
+        <span class="label"><span class="highlight">A</span>nnées</span>
+        <span class="value" id="turbo-val">2025-2026</span>
+      </div>
+      <div class="divider"></div>
+      <div class="btns">
+        <button class="ui red" id="btn-toggle-system">STI2D C'est quoi ?</button>
+        <button class="ui amber" id="btn-engine">Mes projets persos</button>
+        <button class="ui green" id="btn-turbo-boost">Projet Futur</button>
+      </div>
+    </section>
+
+    <!-- Panneau central -->
+    <section class="panel center">
+      <div class="section-title">
+      <h3><span style="color:#700101;">INTERFACE PRINCIPALE</span></h3>
+        <div class="badge">
+          <span class="led cyan"></span>
+          <span id="clock">HEURE SYSTÈME: --:--:--</span>
+        </div>
+      </div>
+      <div class="tile"><div class="k">STATUT DU SITE</div><div class="v" id="v-status">EN DEVELOPPEMENT</div></div>
+  <div class="tile">
+  <div class="k">HEURES TRAVAIL</div>
+  <div class="v"><span class="red-text"><span id="v-speed">20</span>H</span></div>
+  </div>
+      <div class="speed-wrap"><div class="bar"><div class="fill" id="speed-bar"></div></div></div>
+      <div class="btns center" style="margin-top:14px">
+        <button class="ui green" id="btn-demarrage">JOURNAL DE BORD</button>
+        <button class="ui red" id="btn-turbo">PROJETS/REALISATIONS</button>
+        <button class="ui amber" id="btn-analyse">DOSSIER TECHNIQUE</button>
+        <button class="ui cyan" id="btn-autopilot">A PROPOS/CONTACT</button>
+      </div>
+    </section>
+
+    <!-- Panneau droit -->
+    <section class="panel right">
+      <div class="section-title">
+        <h3><span style="color:#700101;">TERMINAL D'INFOS</span></h3>
+        <div class="hr" style="width:120px"></div>
+      </div>
+      <div class="diag-list">
+        <div class="diag-item"><span class="label">Spécialité SIN</span><span class="badge"><span class="led green"></span> Technologies numériques</span></div>
+        <div class="diag-item"><span class="label">Domaines étudiés</span><span class="badge"><span class="led green"></span> Réseaux, capteurs, interfaces</span></div>
+        <div class="diag-item"><span class="label">Compétences développées</span><span class="badge"><span class="led green"></span> Programmation, traitement de données</span></div>
+        <div class="diag-item"><span class="label">Outils utilisés</span><span class="badge"><span class="led green"></span> Arduino, Python, HTML/CSS</span></div>
+        <div class="diag-item"><span class="label">Objectif</span><span class="badge"><span class="led green"></span> Concevoir des systèmes intelligents</span></div>
+      </div>
+    </section>
+  </div>
+
+<section id="admin-login" class="panel info-page" style="display:none; max-width: 400px; margin: 20px auto;">
+  <h3>Connexion Admin</h3>
+  <form id="admin-form">
+    <div style="margin-bottom:10px;">
+      <label for="admin-username">Nom d’utilisateur :</label><br />
+      <input type="text" id="admin-username" name="username" required style="width: 100%; padding: 8px;">
+    </div>
+    <div style="margin-bottom:10px;">
+      <label for="admin-password">Mot de passe :</label><br />
+      <input type="password" id="admin-password" name="password" required style="width: 100%; padding: 8px;">
+    </div>
+    <button type="submit" class="ui red" style="width: 100%;">Se connecter</button>
+    <button type="button" id="admin-cancel" class="ui amber" style="width: 100%; margin-top: 10px;">Annuler</button>
+  </form>
+</section>
+
+
+  <!-- Footer -->
+  <div class="foot">Portfolio v.0.8</div>
+
+  <!-- GIF vocal -->
+  <div id="voice-gif-wrapper">
+    <img id="voice-gif" src="Gifs/static.png" alt="GIF vocal" />
+  </div>
+
+  <!-- Pages info -->
+  <section class="panel info-page" id="page-sti2d"><h3>STI2D C'est quoi ?</h3><p>La spécialité STI2D forme aux technologies numériques.</p><button class="ui cyan" id="back-sti2d">RETOUR</button></section>
+  <section class="panel info-page" id="page-projets"><h3>Mes projets persos</h3><p>Ici, je montrerai des projets que j'ai crée en dehors des cours</p><button class="ui cyan" id="back-projets">RETOUR</button></section>
+  <section class="panel info-page" id="page-futur"><h3>Projet Futur</h3><p>...</p><button class="ui cyan" id="back-futur">RETOUR</button></section>
+  <section class="panel info-page" id="page-journal"><h3>Journal de bord</h3><p>9 septembre 2025 : Squelette du site + premier design</p>
+    <img src="Site-internet-view.png" alt="premier design de site avec les premiers apprentissages" width="500">
+    <p>10 septembre 2025 : Ajout des fonctionnalités + design modifié</p>
+    <img src="Site-internet-view2.0.png" alt="second design travaillé + ajout d'une voix synthèse" width="500">
+     <p>11 septembre 2025 : Ajout des textes dans les différentes catégories + test pour l'admin.</p>
+    <button class="ui cyan" id="back-journal">RETOUR</button></section>
+  <section class="panel info-page" id="page-projets-real"><h3>Projets / Réalisations</h3><p>Mes projets réalisés en classe</p><button class="ui cyan" id="back-projets-real">RETOUR</button></section>
+  <section class="panel info-page" id="page-dossier"><h3>Dossier Technique</h3><p>...</p><button class="ui cyan" id="back-dossier">RETOUR</button></section>
+  <section class="panel info-page" id="page-contact"><h3>A propos / Contact</h3><p>Je suis une lycéenne en STI2D, spécialité SIN.</p>
+    <p>Pour me contacter pour toutes questions ou informations : ...</p><button class="ui cyan" id="back-contact">RETOUR</button></section>
+      
+</div>
+
+<script>
+// Clock
+function pad(n){ return String(n).padStart(2,'0'); }
+function tickClock(){
+  const now = new Date();
+  const hh = pad(now.getHours()), mm = pad(now.getMinutes()), ss = pad(now.getSeconds());
+  document.getElementById("clock").textContent = `HEURE SYSTÈME: ${hh}:${mm}:${ss}`;
+}
+setInterval(tickClock, 1000); tickClock();
+
+// Panels
+const mainPanels = document.querySelectorAll(".panel:not(.info-page)");
+function showPage(pageId){ mainPanels.forEach(p=>p.style.display="none"); document.querySelectorAll(".info-page").forEach(p=>p.style.display="none"); document.getElementById(pageId).style.display="block"; }
+function backToMain(){ mainPanels.forEach(p=>p.style.display="block"); document.querySelectorAll(".info-page").forEach(p=>p.style.display="none"); }
+
+// Audio
+const audios = {
+  sti2d:new Audio("Audios/STI2D.mp3"),
+  projets:new Audio("Audios/MyProjects.mp3"),
+  futur:new Audio("Audios/FuturProjet.mp3"),
+  journal:new Audio("Audios/Journal.mp3"),
+  projetsReal:new Audio("Audios/Realisations.mp3"),
+  dossier:new Audio("Audios/Dossier.mp3"),
+  contact:new Audio("Audios/contact.mp3")
+};
+
+function playAudioWithGif(audio){
+  const gif = document.getElementById("voice-gif");
+  gif.src = "Gifs/kitt-gif.gif"; // GIF animé
+  audio.currentTime = 0;
+  audio.play();
+  audio.onended = ()=>{ gif.src = "Gifs/static.png"; }; // retour au statique
+}
+
+// Boutons gauche
+document.getElementById("btn-toggle-system").addEventListener("click", ()=>{ showPage("page-sti2d"); playAudioWithGif(audios.sti2d); });
+document.getElementById("btn-engine").addEventListener("click", ()=>{ showPage("page-projets"); playAudioWithGif(audios.projets); });
+document.getElementById("btn-turbo-boost").addEventListener("click", ()=>{ showPage("page-futur"); playAudioWithGif(audios.futur); });
+document.getElementById("back-sti2d").addEventListener("click", backToMain);
+document.getElementById("back-projets").addEventListener("click", backToMain);
+document.getElementById("back-futur").addEventListener("click", backToMain);
+
+// Boutons centre
+document.getElementById("btn-demarrage").addEventListener("click", ()=>{ showPage("page-journal"); playAudioWithGif(audios.journal); });
+document.getElementById("btn-turbo").addEventListener("click", ()=>{ showPage("page-projets-real"); playAudioWithGif(audios.projetsReal); });
+document.getElementById("btn-analyse").addEventListener("click", ()=>{ showPage("page-dossier"); playAudioWithGif(audios.dossier); });
+document.getElementById("btn-autopilot").addEventListener("click", ()=>{ showPage("page-contact"); playAudioWithGif(audios.contact); });
+document.getElementById("back-journal").addEventListener("click", backToMain);
+document.getElementById("back-projets-real").addEventListener("click", backToMain);
+document.getElementById("back-dossier").addEventListener("click", backToMain);
+document.getElementById("back-contact").addEventListener("click", backToMain);
+
+const adminPassword = "0209TH";
+const adminUsername = "Hiddleston";
+
+const adminBtn = document.getElementById("admin-btn");
+const adminLoginSection = document.getElementById("admin-login");
+const adminForm = document.getElementById("admin-form");
+const adminCancelBtn = document.getElementById("admin-cancel");
+
+// Afficher le formulaire admin quand on clique sur le bouton ADMIN
+adminBtn.addEventListener("click", () => {
+  document.querySelectorAll(".panel:not(.info-page)").forEach(p => p.style.display = "none");
+  document.querySelectorAll(".info-page").forEach(p => p.style.display = "none");
+  adminLoginSection.style.display = "block";
+});
+
+// Bouton annuler : revenir à la page principale
+adminCancelBtn.addEventListener("click", () => {
+  adminLoginSection.style.display = "none";
+  document.querySelectorAll(".panel:not(.info-page)").forEach(p => p.style.display = "block");
+  document.getElementById("admin-username").value = "";
+  document.getElementById("admin-password").value = "";
+});
+
+// Gestion du formulaire admin
+adminForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+  const username = document.getElementById("admin-username").value.trim();
+  const password = document.getElementById("admin-password").value.trim();
+
+  if (username === adminUsername && password === adminPassword) {
+    alert("Connexion réussie !");
+
+    adminLoginSection.style.display = "none";
+
+  } else {
+    alert("Nom d’utilisateur ou mot de passe incorrect.");
+  }
+});
+</script>
+</body>
+</html>
