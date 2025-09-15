@@ -89,38 +89,19 @@ function loadDossier() {
   // Ajoute la classe pour placer en haut à gauche
   contentArea.classList.add("journal-top-left");
 
-  contentArea.innerHTML = `
-    <h2>Dossier Technique</h2>
-    <ul>
-      <li>Dossier 1 : Analyse technique du projet Basket</li>
-      <li>Dossier 2 : Documentation du site internet (classeur numérique)</li>
-    </ul>
-    <div class="retour-btn-container">
-      <button onclick="backToHome()">Retour</button>
-    </div>
-  `;
 }
 function showProjetBasket() {
   const contentArea = document.getElementById("content-area");
   contentArea.classList.add("journal-top-left");
   contentArea.innerHTML = `
-    <h2>Projet Basket</h2>
-    <p>Lanceur de balle de ping-pong automatisé</p>
-    <div class="retour-btn-container">
-      <button onclick="loadProjets()">Retour aux projets</button>
-    </div>
+   
   `;
 }
 function showClasseurNumerique() {
   const contentArea = document.getElementById("content-area");
   contentArea.classList.add("journal-top-left");
   contentArea.innerHTML = `
-    <h2>Classeur numérique</h2>
-    <img src="Site-internet-view.png" style="width:100%;max-width:250px;border-radius:8px;margin-bottom:1rem;">
-    <p>Un site internet permettant d'organiser, stocker et partager des documents scolaires de façon numérique.</p>
-    <div class="retour-btn-container">
-      <button onclick="loadProjets()">Retour aux projets</button>
-    </div>
+  
   `;
 }
 function loadContact() {
@@ -136,11 +117,7 @@ function loadContact() {
   contentArea.classList.add("journal-top-left");
 
   contentArea.innerHTML = `
-    <h2>Contact</h2>
-    <p>Vous pouvez me contacter à l'adresse suivante :</p>
-    <div class="retour-btn-container">
-      <button onclick="backToHome()">Retour</button>
-    </div>
+    
   `;
 }
 function adminLogin() {
@@ -157,11 +134,7 @@ function showSTI2D() {
 
   contentArea.classList.add("journal-top-left");
   contentArea.innerHTML = `
-    <h2>STI2D</h2>
-    <p>Présentation de la filière STI2D, projets réalisés, compétences acquises, etc.</p>
-    <div class="retour-btn-container">
-      <button onclick="backToHome()">Retour</button>
-    </div>
+  
   `;
 }
 function showProjetsperso() {
@@ -175,10 +148,37 @@ function showProjetsperso() {
 
   contentArea.classList.add("journal-top-left");
   contentArea.innerHTML = `
-    <h2>Mes Projets Perso</h2>
-    <p>Présentation de mes projets réalisée au cours de l'année de 1ère et de terminale</p>
-    <div class="retour-btn-container">
-      <button onclick="backToHome()">Retour</button>
-    </div>
+    
   `;
 }
+function animateAudio(audioElement, dotElement) {
+  const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  const source = audioCtx.createMediaElementSource(audioElement);
+  const analyser = audioCtx.createAnalyser();
+
+  source.connect(analyser);
+  analyser.connect(audioCtx.destination);
+  analyser.fftSize = 256;
+
+  const dataArray = new Uint8Array(analyser.frequencyBinCount);
+
+  function animate() {
+    analyser.getByteFrequencyData(dataArray);
+    let avg = dataArray.reduce((a,b) => a+b, 0) / dataArray.length;
+
+    // Bouge le dot selon le volume
+    dotElement.style.transform = `translateX(${avg}px)`;
+    requestAnimationFrame(animate);
+  }
+
+  animate();
+}
+const dot = document.querySelector(".scanner .dot");
+const audioSTI2D = new Audio("Audios/STI2D.mp3");
+
+document.getElementById("btn-toggle-system").addEventListener("click", ()=> { 
+    showPage("page-sti2d"); 
+    audioSTI2D.currentTime = 0;
+    audioSTI2D.play();
+    animateAudio(audioSTI2D, dot);
+});
