@@ -405,15 +405,11 @@ document.getElementById("btn-basket-project").addEventListener("click", () => {
 document.getElementById("back-basket").addEventListener("click", () => {
   showPage("page-projets-real");
 });
-// Bouton pour ouvrir la page SIN
-document.getElementById("btn-sin-project").addEventListener("click", () => {
+document.getElementById("back-sin").addEventListener("click", backToProjects);
   showPage("page-sin");
-  // Tu peux ajouter un son si tu veux, par exemple :
-  // playAudioWithGif(audios.sin);
-});
-
-// Bouton retour SIN
-document.getElementById("back-sin").addEventListener("click", backToMain);
+function backToProjects() {
+  showPage("page-projets-real");
+}
 
 
 
