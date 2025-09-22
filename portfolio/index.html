@@ -282,7 +282,10 @@ header.top .title-container {
 <section class="panel info-page" id="page-projets-real" style="display:none;">
   <h3>Projets / Réalisations</h3>
   <p>Mes projets réalisés en classe</p>
+  <button class="ui amber" id="btn-basket-project">Projet Basket</button> <!-- Nouveau bouton -->
+  <button class="ui cyan" id="back-projets-real">RETOUR</button>
 </section>
+
 
 
 <section class="panel info-page" id="page-basket" style="display:none;">
@@ -390,14 +393,16 @@ adminCancelBtn.addEventListener("click", () => {
   
 });
 
-document.getElementById("back-projets-real").addEventListener("click", backToMain);
+// Affiche la page Basket quand on clique sur le bouton dans Projets Réalisés
+document.getElementById("btn-basket-project").addEventListener("click", () => {
+  showPage("page-basket");
+});
 
-const btnBasket = document.getElementById('btn-basket');
-const backBasket = document.getElementById('back-basket');
-const backProjetsReal = document.getElementById('back-projets-real');
+// Retour à la liste des projets réalisés depuis la page Basket
+document.getElementById("back-basket").addEventListener("click", () => {
+  showPage("page-projets-real");
+});
 
-const pageProjetsReal = document.getElementById('page-projets-real');
-const pageBasket = document.getElementById('page-basket');
 
 
 btnBasket.addEventListener('click', () => {
