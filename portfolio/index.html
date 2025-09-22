@@ -279,17 +279,14 @@ header.top .title-container {
   <button class="ui cyan" id="back-journal">RETOUR</button>
 </section>
 
-<!-- Page des projets réalisés -->
-<section class="panel info-page" id="page-projets-real" style="display:block;">
-  <h2>Projets réalisés</h2>
-  <button id="btn-sin">Projet SIN</button>
+<section class="panel info-page" id="page-projets-real" style="display:none;">
+  <h3>Projets / Réalisations</h3>
+  <p>Mes projets réalisés en classe</p>
+  <button class="ui amber" id="btn-basket-project">Projet Basket</button>
+  <button class="ui cyan" id="back-projets-real">RETOUR</button>
 </section>
 
 
-<section class="panel info-page" id="page-sin" style="display:none;">
-  <h2>Projet SIN</h2>
-  <button id="back-sin">Retour</button>
-</section>
 
 <section class="panel info-page" id="page-basket" style="display:none;">
   <img src="Images/Chassis-voiture.png" alt="Le chassis de notre voiture cybertruck" width="300">
@@ -298,6 +295,7 @@ header.top .title-container {
   <p>Voici la Carroserie de notre Cybertruck qui servira de support à notre projet</p>
   <button class="ui cyan" id="back-basket">RETOUR</button>
 </section>
+
 
 <section class="panel info-page" id="page-dossier">
   <h3>Dossier Technique</h3>
@@ -414,23 +412,6 @@ backBasket.addEventListener('click', () => {
   pageProjetsReal.style.display = 'block';
 });
 
-  // Fonction pour afficher une page et masquer les autres
-  function showPage(id) {
-    const pages = document.querySelectorAll(".info-page");
-    pages.forEach(page => {
-      page.style.display = (page.id === id) ? "block" : "none";
-    });
-  }
-
-  // Bouton Projet SIN → affiche la page SIN
-  document.getElementById("btn-sin").addEventListener("click", () => {
-    showPage("page-sin");
-  });
-
-  // Bouton Retour dans SIN → retourne à la page des projets réalisés
-  document.getElementById("back-sin").addEventListener("click", () => {
-    showPage("page-projets-real");
-  });
 
 // Gestion du formulaire admin
 adminForm.addEventListener("submit", (e) => {
