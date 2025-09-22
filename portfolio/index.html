@@ -425,7 +425,16 @@ backBasket.addEventListener('click', () => {
   pageProjetsReal.style.display = 'block';
 });
 
+btnSIN.addEventListener('click', () => {
+  pageProjetsReal.style.display = 'none';
+  pageSIN.style.display = 'block';
+});
 
+// Retour depuis la page Basket vers la page projets
+backSIN.addEventListener('click', () => {
+  pageSIN.style.display = 'none';
+  pageProjetsReal.style.display = 'block';
+});
 // Gestion du formulaire admin
 adminForm.addEventListener("submit", (e) => {
   e.preventDefault();
