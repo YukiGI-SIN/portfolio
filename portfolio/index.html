@@ -408,8 +408,8 @@ document.getElementById("btn-SIN").addEventListener("click", () => {
   showPage("page-SIN");
 });
 
-// Retour nouveau projet
-document.getElementById("back-SIN").addEventListener("click", backToMain);
+document.getElementById("back-SIN").addEventListener("click", () => {
+  showPage("page-projets-real");
 
 
 btnBasket.addEventListener('click', () => {
