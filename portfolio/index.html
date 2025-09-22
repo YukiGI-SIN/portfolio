@@ -283,7 +283,7 @@ header.top .title-container {
   <h3>Projets / Réalisations</h3>
   <p>Mes projets réalisés en classe</p>
   <button class="ui amber" id="btn-basket-project">Projet Basket</button>
-  <button class="ui amber" id="btn-SIN-project">Projet SIN</button>
+  <button class="ui amber" id="btn-sin-project">Projet SIN</button>
   <button class="ui cyan" id="back-projets-real">RETOUR</button>
 </section>
 
@@ -297,9 +297,10 @@ header.top .title-container {
   <button class="ui cyan" id="back-basket">RETOUR</button>
 </section>
 
-<section class="panel info-page" id="page-basket" style="display:none;">
-  <p>Partie SIN</p>
-  <button class="ui cyan" id="back-SIN-project">RETOUR</button>
+<section class="panel info-page" id="page-sin" style="display:none;">
+  <h3>Projet SIN</h3>
+  <p>Spécialité SIN.</p>
+  <button class="ui cyan" id="back-sin">RETOUR</button>
 </section>
 
 
@@ -399,18 +400,20 @@ adminCancelBtn.addEventListener("click", () => {
 document.getElementById("btn-basket-project").addEventListener("click", () => {
   showPage("page-basket");
 });
-document.getElementById("btn-basket-project").addEventListener("click", () => {
-  showPage("page-SIN-project");
-});
 
-
+// Retour à la liste des projets réalisés depuis la page Basket
 document.getElementById("back-basket").addEventListener("click", () => {
   showPage("page-projets-real");
 });
-
-document.getElementById("back-SIN-project").addEventListener("click", () => {
-  showPage("page-projets-real");
+// Bouton pour ouvrir la page SIN
+document.getElementById("btn-sin-project").addEventListener("click", () => {
+  showPage("page-sin");
+  // Tu peux ajouter un son si tu veux, par exemple :
+  // playAudioWithGif(audios.sin);
 });
+
+// Bouton retour SIN
+document.getElementById("back-sin").addEventListener("click", backToMain);
 
 
 
@@ -418,18 +421,10 @@ btnBasket.addEventListener('click', () => {
   pageProjetsReal.style.display = 'none';
   pageBasket.style.display = 'block';
 });
-btnSINproject.addEventListener('click', () => {
-  pageProjetsReal.style.display = 'none';
-  pageSINproject.style.display = 'block';
-});
 
 // Retour depuis la page Basket vers la page projets
 backBasket.addEventListener('click', () => {
   pageBasket.style.display = 'none';
-  pageProjetsReal.style.display = 'block';
-});
-backINproject.addEventListener('click', () => {
-  pageINproject.style.display = 'none';
   pageProjetsReal.style.display = 'block';
 });
 
