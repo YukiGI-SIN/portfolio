@@ -225,20 +225,26 @@ header.top .title-container {
     </section>
   </div>
 
-<section id="admin-login" class="panel info-page" style="display:none; max-width: 400px; margin: 20px auto;">
-  <h3>Connexion Admin</h3>
-  <form id="admin-form">
-    <div style="margin-bottom:10px;">
-      <label for="admin-username">Nom d’utilisateur :</label><br />
-      <input type="text" id="admin-username" name="username" required style="width: 100%; padding: 8px;">
-    </div>
-    <div style="margin-bottom:10px;">
-      <label for="admin-password">Mot de passe :</label><br />
-      <input type="password" id="admin-password" name="password" required style="width: 100%; padding: 8px;">
-    </div>
-    <button type="submit" class="ui red" style="width: 100%;">Se connecter</button>
-    <button type="button" id="admin-cancel" class="ui amber" style="width: 100%; margin-top: 10px;">Annuler</button>
-  </form>
+   <!-- Panneau Admin -->
+  <section id="admin-panel" class="panel info-page" style="max-width:500px; margin:20px auto;">
+    <h3>Panneau Admin</h3>
+    <textarea id="new-entry" rows="4" style="width:100%; padding:10px;" placeholder="Écris ton entrée du journal..."></textarea>
+    <input type="file" id="new-image" accept="image/*" style="margin-top:10px; display:block;">
+    <button id="add-entry" class="ui red" style="margin-top:10px; width:100%;">Ajouter au Journal</button>
+    <button id="admin-logout" class="ui amber" style="margin-top:10px; width:100%;">Déconnexion</button>
+  </section>
+
+   <!-- Connexion Admin -->
+  <section id="admin-login" class="panel info-page" style="max-width:400px; margin:20px auto;">
+    <h3>Connexion Admin</h3>
+    <form id="admin-form">
+      <input type="text" id="admin-username" placeholder="Nom d’utilisateur" required style="width:100%; padding:8px; margin-bottom:10px;">
+      <input type="password" id="admin-password" placeholder="Mot de passe" required style="width:100%; padding:8px; margin-bottom:10px;">
+      <button type="submit" class="ui red" style="width:100%;">Se connecter</button>
+      <button type="button" id="admin-cancel" class="ui amber" style="width:100%; margin-top:10px;">Annuler</button>
+    </form>
+  </section>
+
 </section>
 
 
@@ -314,6 +320,7 @@ header.top .title-container {
   <button class="ui cyan" id="back-contact">RETOUR</button>
 </section>
 
+
 </div>
 
 <script>
@@ -369,29 +376,7 @@ document.getElementById("back-projets-real").addEventListener("click", backToMai
 document.getElementById("back-dossier").addEventListener("click", backToMain);
 document.getElementById("back-contact").addEventListener("click", backToMain);
 
-const adminPassword = "0209TH";
-const adminUsername = "Hiddleston";
 
-const adminBtn = document.getElementById("admin-btn");
-const adminLoginSection = document.getElementById("admin-login");
-const adminForm = document.getElementById("admin-form");
-const adminCancelBtn = document.getElementById("admin-cancel");
-
-// Afficher le formulaire admin quand on clique sur le bouton ADMIN
-adminBtn.addEventListener("click", () => {
-  document.querySelectorAll(".panel:not(.info-page)").forEach(p => p.style.display = "none");
-  document.querySelectorAll(".info-page").forEach(p => p.style.display = "none");
-  adminLoginSection.style.display = "block";
-});
-
-// Bouton annuler : revenir à la page principale
-adminCancelBtn.addEventListener("click", () => {
-  adminLoginSection.style.display = "none";
-  document.querySelectorAll(".panel:not(.info-page)").forEach(p => p.style.display = "block");
-  document.getElementById("admin-username").value = "";
-  document.getElementById("admin-password").value = "";
-  
-});
 
 // Affiche la page Basket quand on clique sur le bouton dans Projets Réalisés
 document.getElementById("btn-basket-project").addEventListener("click", () => {
@@ -436,20 +421,65 @@ backSIN.addEventListener('click', () => {
   pageProjetsReal.style.display = 'block';
 });
 // Gestion du formulaire admin
-adminForm.addEventListener("submit", (e) => {
+const adminUsername="Hiddleston", adminPassword="0209TH";
+document.getElementById("admin-btn").addEventListener("click",()=>showPage("admin-login"));
+document.getElementById("admin-cancel").addEventListener("click",backToMain);
+
+document.getElementById("admin-form").addEventListener("submit",e=>{
   e.preventDefault();
-  const username = document.getElementById("admin-username").value.trim();
-  const password = document.getElementById("admin-password").value.trim();
-
-  if (username === adminUsername && password === adminPassword) {
-    alert("Connexion réussie !");
-
-    adminLoginSection.style.display = "none";
-
+  const user=document.getElementById("admin-username").value.trim();
+  const pass=document.getElementById("admin-password").value.trim();
+  if(user===adminUsername && pass===adminPassword){
+    showPage("admin-panel");
   } else {
-    alert("Nom d’utilisateur ou mot de passe incorrect.");
+    alert("Identifiants incorrects");
   }
 });
+
+document.getElementById("admin-logout").addEventListener("click",backToMain);
+
+// Journal
+function loadEntries(){
+  const entries=JSON.parse(localStorage.getItem("journalEntries")||"[]");
+  const container=document.getElementById("journal-entries");
+  container.innerHTML="";
+  entries.forEach(e=>{
+    const div=document.createElement("div");
+    div.innerHTML=`<p>${e.text}</p>`;
+    if(e.image){const img=document.createElement("img");img.src=e.image;img.width=400;div.appendChild(img);}
+    container.appendChild(div);
+  });
+}
+document.getElementById("add-entry").addEventListener("click",()=>{
+  const text=document.getElementById("new-entry").value.trim();
+  const file=document.getElementById("new-image").files[0];
+  if(!text && !file){alert("Ajoute du texte ou une image");return;}
+  const entry={text,image:null};
+  if(file){
+    const reader=new FileReader();
+    reader.onload=e=>{
+      entry.image=e.target.result;
+      saveEntry(entry);
+    };
+    reader.readAsDataURL(file);
+  } else {
+    saveEntry(entry);
+  }
+});
+function saveEntry(entry){
+  const entries=JSON.parse(localStorage.getItem("journalEntries")||"[]");
+  entries.push(entry);
+  localStorage.setItem("journalEntries",JSON.stringify(entries));
+  loadEntries();
+  document.getElementById("new-entry").value="";
+  document.getElementById("new-image").value="";
+}
+window.addEventListener("load",loadEntries);
+document.getElementById("btn-demarrage").addEventListener("click",()=>{showPage("page-journal");loadEntries();});
+document.getElementById("back-journal").addEventListener("click",backToMain);
+</script>
+</body>
+</html>
 </script>
 </body>
 </html>
