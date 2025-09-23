@@ -140,44 +140,26 @@ header.top .title-container {
 
 <div class="wrap">
 
-  <!-- Header -->
-   
-<header class="top">
-  <div class="title-container">
-    <h1><span style="color:#700101;">S.I.N</span></h1>
-    <p class="subtitle">Synthèse d'Intelligence Numérique</p>
-  </div>
-   <div class="badge">
-    <span class="led green" id="led-system"></span>
-    <button id="admin-btn" class="ui cyan">Admin</button>
-  </div>
-</header>
+   <!-- Header -->
+  <header class="top">
+    <div style="text-align:center;flex:1">
+      <h1><span style="color:#700101">S.I.N</span></h1>
+      <p class="subtitle">Synthèse d'Intelligence Numérique</p>
+    </div>
+    <div class="badge" style="gap:8px">
+      <span class="led green" id="led-system" style="background:#21e66f"></span>
+      <button id="admin-btn" class="ui cyan">Admin</button>
+    </div>
+  </header>
 
-  <!-- Grille principale -->
+  <!-- Main panels (visible au départ) -->
   <div class="grid">
-    <!-- Panneau gauche -->
-    <section class="panel left">
-      <div class="section-title">
-       <h3><span style="color:#700101;">PANNEAU SECONDAIRE</span></h3>
-        <span class="tag">Classe STI2D</span>
-      </div>
-      <div class="scanner"><div class="dot"></div></div>
-      <div class="row">
-    <span class="label"><span class="highlight">C</span>lasse</span>
-     <span class="value" id="sys-val">Terminale</span>
-    </div>
-      <div class="row">
-      <span class="label"><span class="highlight">I</span>nspiration site</span>
-    <span class="value" id="engine-val">K2000</span>
-    </div>
-      <div class="row">
-        <span class="label"><span class="highlight">A</span>ide code</span>
-        <span class="value" id="fuel-val">IA ( chat gpt, copilot )</span>
-      </div>
-      <div class="row">
-        <span class="label"><span class="highlight">A</span>nnées</span>
-        <span class="value" id="turbo-val">2025-2026</span>
-      </div>
+    <section class="panel main-panel left">
+      <h3><span style="color:#700101">PANNEAU SECONDAIRE</span></h3>
+      <div class="row"><span class="label"><span class="highlight">C</span>lasse</span><span class="value" id="sys-val">Terminale</span></div>
+      <div class="row"><span class="label"><span class="highlight">I</span>nspiration site</span><span class="value" id="engine-val">K2000</span></div>
+      <div class="row"><span class="label"><span class="highlight">A</span>ide code</span><span class="value" id="fuel-val">IA (chat gpt)</span></div>
+      <div class="row"><span class="label"><span class="highlight">A</span>nnées</span><span class="value" id="turbo-val">2025-2026</span></div>
       <div class="divider"></div>
       <div class="btns">
         <button class="ui red" id="btn-toggle-system">STI2D C'est quoi ?</button>
@@ -186,22 +168,15 @@ header.top .title-container {
       </div>
     </section>
 
-    <!-- Panneau central -->
-    <section class="panel center">
-      <div class="section-title">
-      <h3><span style="color:#700101;">INTERFACE PRINCIPALE</span></h3>
-        <div class="badge">
-          <span class="led cyan"></span>
-          <span id="clock">HEURE SYSTÈME: --:--:--</span>
-        </div>
+    <section class="panel main-panel center">
+      <h3><span style="color:#700101">INTERFACE PRINCIPALE</span></h3>
+      <div style="display:flex;gap:8px;align-items:center;margin-bottom:12px">
+        <span class="led cyan" style="background:#27d2ff"></span>
+        <div id="clock">HEURE SYSTÈME: --:--:--</div>
       </div>
       <div class="tile"><div class="k">STATUT DU SITE</div><div class="v" id="v-status">EN DEVELOPPEMENT</div></div>
-  <div class="tile">
-  <div class="k">HEURES TRAVAIL</div>
-  <div class="v"><span class="red-text"><span id="v-speed">20</span>H</span></div>
-  </div>
-      <div class="speed-wrap"><div class="bar"><div class="fill" id="speed-bar"></div></div></div>
-      <div class="btns center" style="margin-top:14px">
+      <div class="tile"><div class="k">HEURES TRAVAIL</div><div class="v"><span class="red-text" id="v-hours">20H</span></div></div>
+      <div class="btns center" style="margin-top:12px">
         <button class="ui green" id="btn-demarrage">JOURNAL DE BORD</button>
         <button class="ui red" id="btn-turbo">PROJETS/REALISATIONS</button>
         <button class="ui amber" id="btn-analyse">DOSSIER TECHNIQUE</button>
@@ -209,41 +184,94 @@ header.top .title-container {
       </div>
     </section>
 
-    <!-- Panneau droit -->
-    <section class="panel right">
-      <div class="section-title">
-        <h3><span style="color:#700101;">TERMINAL D'INFOS</span></h3>
-        <div class="hr" style="width:120px"></div>
-      </div>
-      <div class="diag-list">
-        <div class="diag-item"><span class="label">Spécialité SIN</span><span class="badge"><span class="led green"></span> Technologies numériques</span></div>
-        <div class="diag-item"><span class="label">Domaines étudiés</span><span class="badge"><span class="led green"></span> Réseaux, capteurs, interfaces</span></div>
-        <div class="diag-item"><span class="label">Compétences développées</span><span class="badge"><span class="led green"></span> Programmation, traitement de données</span></div>
-        <div class="diag-item"><span class="label">Outils utilisés</span><span class="badge"><span class="led green"></span> Arduino, Python, HTML/CSS</span></div>
-        <div class="diag-item"><span class="label">Objectif</span><span class="badge"><span class="led green"></span> Concevoir des systèmes intelligents</span></div>
-      </div>
+    <section class="panel main-panel right">
+      <h3><span style="color:#700101">TERMINAL D'INFOS</span></h3>
+      <div class="row" style="margin-bottom:6px"><span class="label">Spécialité</span><span class="value">SIN</span></div>
+      <div class="row" style="margin-bottom:6px"><span class="label">Domaines</span><span class="value">Réseaux, capteurs</span></div>
+      <div style="margin-top:10px" class="badge"><span class="led green" style="background:#21e66f"></span> Technologies numériques</div>
     </section>
   </div>
 
-   <!-- Panneau Admin -->
-  <section id="admin-panel" class="panel info-page" style="max-width:500px; margin:20px auto;">
-    <h3>Panneau Admin</h3>
-    <textarea id="new-entry" rows="4" style="width:100%; padding:10px;" placeholder="Écris ton entrée du journal..."></textarea>
-    <input type="file" id="new-image" accept="image/*" style="margin-top:10px; display:block;">
-    <button id="add-entry" class="ui red" style="margin-top:10px; width:100%;">Ajouter au Journal</button>
-    <button id="admin-logout" class="ui amber" style="margin-top:10px; width:100%;">Déconnexion</button>
+  <!-- Info pages (hidden by default) -->
+  <section id="page-sti2d" class="panel info-page">
+    <h3>STI2D — C'est quoi ?</h3>
+    <p>La spécialité STI2D (Sciences et Technologies de l'Industrie et du Développement Durable)...</p>
+    <button class="ui cyan" id="back-sti2d">RETOUR</button>
   </section>
 
-   <!-- Connexion Admin -->
-  <section id="admin-login" class="panel info-page" style="max-width:400px; margin:20px auto;">
+  <section id="page-projets" class="panel info-page">
+    <h3>Mes projets persos</h3>
+    <p>Ici je montre mes projets personnels.</p>
+    <button class="ui cyan" id="back-projets">RETOUR</button>
+  </section>
+
+  <section id="page-futur" class="panel info-page">
+    <h3>Projet Futur</h3>
+    <p>...</p>
+    <button class="ui cyan" id="back-futur">RETOUR</button>
+  </section>
+
+  <section id="page-journal" class="panel info-page">
+    <h3>Journal de bord</h3>
+    <div id="journal-entries"></div>
+    <button class="ui cyan" id="back-journal">RETOUR</button>
+  </section>
+
+  <section id="page-projets-real" class="panel info-page">
+    <h3>Projets / Réalisations</h3>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
+      <button class="ui amber" id="btn-basket-project">Projet Basket</button>
+      <button class="ui green" id="btn-SIN">SIN</button>
+    </div>
+    <button class="ui cyan" id="back-projets-real" style="margin-top:12px">RETOUR</button>
+  </section>
+
+  <section id="page-basket" class="panel info-page">
+    <h3>Projet Basket</h3>
+    <img src="Images/Chassis-voiture.png" alt="chassis" style="max-width:100%;height:auto;margin-top:8px">
+    <p>Texte du projet basket...</p>
+    <button class="ui cyan" id="back-basket">RETOUR</button>
+  </section>
+
+  <section id="page-SIN" class="panel info-page">
+    <h3>SIN</h3>
+    <p>Infos projet SIN...</p>
+    <button class="ui cyan" id="back-SIN">RETOUR</button>
+  </section>
+
+  <section id="page-dossier" class="panel info-page">
+    <h3>Dossier Technique</h3>
+    <p>...</p>
+    <button class="ui cyan" id="back-dossier">RETOUR</button>
+  </section>
+
+  <section id="page-contact" class="panel info-page">
+    <h3>A propos / Contact</h3>
+    <p>Je suis une lycéenne en STI2D, spécialité SIN.</p>
+    <button class="ui cyan" id="back-contact">RETOUR</button>
+  </section>
+
+  <!-- Admin: login + panel  -->
+  <section id="admin-login" class="panel info-page" style="max-width:480px;margin:18px auto">
     <h3>Connexion Admin</h3>
     <form id="admin-form">
-      <input type="text" id="admin-username" placeholder="Nom d’utilisateur" required style="width:100%; padding:8px; margin-bottom:10px;">
-      <input type="password" id="admin-password" placeholder="Mot de passe" required style="width:100%; padding:8px; margin-bottom:10px;">
-      <button type="submit" class="ui red" style="width:100%;">Se connecter</button>
-      <button type="button" id="admin-cancel" class="ui amber" style="width:100%; margin-top:10px;">Annuler</button>
+      <input id="admin-username" type="text" placeholder="Nom d’utilisateur" required style="width:100%;padding:8px;margin-bottom:8px">
+      <input id="admin-password" type="password" placeholder="Mot de passe" required style="width:100%;padding:8px;margin-bottom:8px">
+      <button type="submit" class="ui red" style="width:100%">Se connecter</button>
+      <button type="button" id="admin-cancel" class="ui amber" style="width:100%;margin-top:8px">Annuler</button>
     </form>
   </section>
+
+  <section id="admin-panel" class="panel info-page" style="max-width:560px;margin:18px auto">
+    <h3>Panneau Admin</h3>
+    <textarea id="new-entry" rows="4" placeholder="Écris ton entrée du journal..." style="width:100%;padding:8px"></textarea>
+    <input id="new-image" type="file" accept="image/*" style="margin-top:8px">
+    <button id="add-entry" class="ui red" style="width:100%;margin-top:8px">Ajouter au Journal</button>
+    <button id="admin-logout" class="ui amber" style="width:100%;margin-top:8px">Déconnexion</button>
+  </section>
+
+  <div class="foot">Portfolio v.0.8</div>
+</div>
 
 </section>
 
@@ -439,13 +467,14 @@ backSIN.addEventListener('click', () => {
   pageProjetsReal.style.display = 'block';
 });
 
+
 const ADMIN_USER = 'Hiddleston';
 const ADMIN_PASS = '0209TH';
 
 document.getElementById('admin-btn').addEventListener('click', ()=> showPage('admin-login'));
 document.getElementById('admin-cancel').addEventListener('click', ()=> { document.getElementById('admin-form').reset(); backToMain(); });
 
-document.getElementById('admin-form').addEventListener('submit', e=>{
+document.getElementById('admin-form').addEventListener('submit', function(e){
   e.preventDefault();
   const user = document.getElementById('admin-username').value.trim();
   const pass = document.getElementById('admin-password').value.trim();
@@ -457,7 +486,18 @@ document.getElementById('admin-form').addEventListener('submit', e=>{
   }
 });
 
-document.getElementById('admin-logout').addEventListener('click', ()=> { document.getElementById('new-entry').value=''; document.getElementById('new-image').value=null; backToMain(); });
+document.getElementById('admin-logout').addEventListener('click', ()=> {
+  document.getElementById('new-entry').value = '';
+  document.getElementById('new-image').value = null;
+  backToMain();
+});
+
+
+function escapeHtml(text){
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
+}
 
 function loadEntries(){
   const container = document.getElementById('journal-entries');
@@ -468,11 +508,11 @@ function loadEntries(){
     container.innerHTML = '<p style="opacity:.8">Aucune entrée pour le moment.</p>';
     return;
   }
-  entries.forEach((entry, idx) => {
+  entries.slice().reverse().forEach(entry => { // afficher du plus récent
     const div = document.createElement('div');
     div.className = 'journal-entry';
     const date = entry.date || '';
-    div.innerHTML = `<div style="opacity:.8;font-size:12px;margin-bottom:6px">${date}</div><p>${escapeHtml(entry.text || '')}</p>`;
+    div.innerHTML = `<div style="opacity:.8;font-size:12px;margin-bottom:6px">${escapeHtml(date)}</div><p>${escapeHtml(entry.text || '')}</p>`;
     if(entry.image){
       const img = document.createElement('img');
       img.src = entry.image;
@@ -489,7 +529,6 @@ function saveEntry(entry){
   localStorage.setItem('journalEntries', JSON.stringify(entries));
 }
 
-
 document.getElementById('add-entry').addEventListener('click', ()=>{
   const txt = document.getElementById('new-entry').value.trim();
   const fileInput = document.getElementById('new-image');
@@ -504,7 +543,7 @@ document.getElementById('add-entry').addEventListener('click', ()=>{
     reader.onload = function(ev){
       entry.image = ev.target.result; // base64
       saveEntry(entry);
-      document.getElementById('new-entry').value='';
+      document.getElementById('new-entry').value = '';
       fileInput.value = '';
       showPage('page-journal');
       loadEntries();
@@ -512,25 +551,19 @@ document.getElementById('add-entry').addEventListener('click', ()=>{
     reader.readAsDataURL(file);
   } else {
     saveEntry(entry);
-    document.getElementById('new-entry').value='';
+    document.getElementById('new-entry').value = '';
     fileInput.value = '';
     showPage('page-journal');
     loadEntries();
   }
 });
 
-
-function escapeHtml(text){
-  const div = document.createElement('div');
-  div.textContent = text;
-  return div.innerHTML;
-}
-
-
 window.addEventListener('load', ()=> {
+  // display main panels (default)
+  showMain();
+  // preload journal
   loadEntries();
 });
-
 </script>
 </body>
 </html>
