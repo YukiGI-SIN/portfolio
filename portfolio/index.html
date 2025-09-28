@@ -369,7 +369,16 @@ document.getElementById("back-projets-real").addEventListener("click", backToMai
 document.getElementById("back-dossier").addEventListener("click", backToMain);
 document.getElementById("back-contact").addEventListener("click", backToMain);
 
-Bouton Admin
+const adminPassword = "0209TH";
+
+
+function showPage(id) {
+hideAll();
+document.getElementById(id).style.display = "block";
+}
+
+
+// Bouton Admin
 adminBtn.addEventListener("click", () => {
 hideAll();
 adminLoginSection.style.display = "block";
@@ -434,7 +443,7 @@ saveEntry(entryText, e.target.result);
 };
 reader.readAsDataURL(file);
 } else {
-  saveEntry(entryText, null);
+saveEntry(entryText, null);
 }
 
 
@@ -465,6 +474,7 @@ img.width = 400;
 entryDiv.appendChild(img);
 }
 journalEntries.appendChild(entryDiv);
+});
 });
 
 // Affiche la page Basket quand on clique sur le bouton dans Projets Réalisés
@@ -508,7 +518,6 @@ btnSIN.addEventListener('click', () => {
 backSIN.addEventListener('click', () => {
   pageSIN.style.display = 'none';
   pageProjetsReal.style.display = 'block';
-});
 });
 </script>
 </body>
