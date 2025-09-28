@@ -322,6 +322,31 @@ header.top .title-container {
   <button class="ui cyan" id="back-contact">RETOUR</button>
 </section>
 
+<!-- Formulaire Admin -->
+<div id="admin-panel" style="display:none;">
+  <h2>Admin</h2>
+  <form id="admin-content-form">
+    <label>Choisir rubrique :</label>
+    <select id="target-section">
+      <option value="journal">Journal de bord</option>
+       <div id="entries-journal"></div>
+      <option value="projets">Projets:Réalisations</option>
+       <div id="entries-projets"></div>
+      <option value="dossier">Dossier technique</option>
+       <div id="entries-dossier"></div>
+    </select><br><br>
+
+    <label>Ajouter du code HTML :</label><br>
+    <textarea id="html-content" rows="5" cols="50" placeholder="Écris ton HTML ici"></textarea><br><br>
+
+    <label>Ajouter un fichier (image, PDF...) :</label><br>
+    <input type="file" id="file-content" /><br><br>
+
+    <button type="submit">Ajouter</button>
+  </form>
+</div>
+
+
 </div>
 
 <script>
@@ -334,21 +359,6 @@ function tickClock(){
 }
 setInterval(tickClock, 1000); tickClock();
 
-// ---------- Navigation ----------
-const mainPanels = document.querySelectorAll(".panel:not(.info-page)");
-const infoPages = document.querySelectorAll(".info-page");
-
-function showMain(){
-  mainPanels.forEach(p=>p.style.display="block");
-  infoPages.forEach(p=>p.style.display="none");
-}
-function showPage(id){
-  mainPanels.forEach(p=>p.style.display="none");
-  infoPages.forEach(p=>p.style.display="none");
-  const el = document.getElementById(id);
-  if(el) el.style.display = "block";
-  loadEntries(); // charge les entrées selon la page active
-}
 
 // ---------- Audio + GIF ----------
 const audios = {
@@ -385,17 +395,18 @@ document.getElementById("btn-autopilot").addEventListener("click", ()=>{ showPag
    if(el) el.addEventListener("click", showMain);
 });
 
-// ---------- Admin ----------
-const ADMIN_USER = "Hiddleston";
-const ADMIN_PASS = "0209TH";
-let isAdmin = false; // statut admin
+// Statut admin
+let isAdmin = false;
 
+// Connexion Admin
 const adminBtn = document.getElementById("admin-btn");
-const adminLogin = document.getElementById("admin-login");
 const adminForm = document.getElementById("admin-form");
 const adminCancel = document.getElementById("admin-cancel");
 const adminPanel = document.getElementById("admin-panel");
 const adminLogout = document.getElementById("admin-logout");
+
+const ADMIN_USER = "Hiddleston";
+const ADMIN_PASS = "0209TH";
 
 adminBtn.addEventListener("click", ()=>{ showPage("admin-login"); });
 adminCancel.addEventListener("click", ()=>{ showMain(); adminForm.reset(); });
@@ -404,12 +415,10 @@ adminForm.addEventListener("submit", (e)=>{
   e.preventDefault();
   const user = document.getElementById("admin-username").value.trim();
   const pass = document.getElementById("admin-password").value.trim();
-  if(user===ADMIN_USER && pass===ADMIN_PASS){
-    alert("Connexion réussie !");
+  if(user === ADMIN_USER && pass === ADMIN_PASS){
     isAdmin = true;
     adminForm.reset();
-    if(adminPanel){ showPage("admin-panel"); }
-    else { showMain(); }
+    showPage("admin-panel");
   } else {
     alert("Nom d’utilisateur ou mot de passe incorrect.");
   }
@@ -417,73 +426,76 @@ adminForm.addEventListener("submit", (e)=>{
 if(adminLogout){
   adminLogout.addEventListener("click", ()=>{ 
     isAdmin = false;
-    if(adminPanel) adminPanel.style.display="none"; 
+    adminPanel.style.display = "none"; 
     showMain(); 
   });
 }
 
-// ---------- Journal / Projets / Dossier technique ----------
-const addEntryBtn = document.getElementById("add-entry");
-const newEntryInput = document.getElementById("new-entry");
-const newImageInput = document.getElementById("new-image");
-const journalEntries = document.getElementById("journal-entries");
-
-function escapeHtml(text){ const d=document.createElement("div"); d.textContent=text; return d.innerHTML; }
-
-function getCurrentPageKey(){
-  if(document.getElementById("page-journal")?.style.display==="block") return "journalEntries_journal";
-  if(document.getElementById("page-projets-real")?.style.display==="block") return "journalEntries_projets";
-  if(document.getElementById("page-dossier")?.style.display==="block") return "journalEntries_dossier";
-  return null;
+// Stockage & affichage contenu admin
+function getSectionKey(section){
+  return "section_" + section;
 }
 
-function loadEntries(){
-  if(!journalEntries) return;
-  journalEntries.innerHTML="";
-  const pageKey = getCurrentPageKey();
-  if(!pageKey) return;
-  const entries = JSON.parse(localStorage.getItem(pageKey)||"[]");
-  if(entries.length===0){ journalEntries.innerHTML="<p>Aucune entrée pour le moment.</p>"; return; }
-  entries.slice().reverse().forEach(entry=>{
-    const div=document.createElement("div");
-    div.innerHTML=`<div style="font-size:12px;opacity:.7">${escapeHtml(entry.date||"")}</div><p>${escapeHtml(entry.text||"")}</p>`;
-    if(entry.image){ 
-      const img=document.createElement("img");
-      img.src=entry.image; img.style.maxWidth="100%"; img.style.borderRadius="8px"; img.style.marginTop="6px";
-      div.appendChild(img);
+function loadSection(section){
+  const container = document.getElementById("entries-" + section);
+  if(!container) return;
+  container.innerHTML = "";
+  const entries = JSON.parse(localStorage.getItem(getSectionKey(section)) || "[]");
+  if(entries.length === 0){
+    container.innerHTML = "<p>Aucune entrée pour le moment.</p>";
+    return;
+  }
+  entries.forEach(entry => {
+    const div = document.createElement("div");
+    div.innerHTML = entry.html || "";
+    if(entry.file){
+      const link = document.createElement("a");
+      link.href = entry.file.url;
+      link.target = "_blank";
+      link.textContent = entry.file.name;
+      div.appendChild(document.createElement("br"));
+      div.appendChild(link);
     }
-    journalEntries.appendChild(div);
+    container.appendChild(div);
   });
 }
 
-function saveEntry(entry){
-  const pageKey = getCurrentPageKey();
-  if(!pageKey) return;
-  const entries = JSON.parse(localStorage.getItem(pageKey)||"[]");
+document.getElementById("admin-content-form").addEventListener("submit", e=>{
+  e.preventDefault();
+  if(!isAdmin){
+    alert("Vous devez être connecté en admin !");
+    return;
+  }
+  const section = document.getElementById("target-section").value;
+  const htmlContent = document.getElementById("html-content").value;
+  const fileInput = document.getElementById("file-content").files[0];
+
+  const entry = { html: htmlContent, file: null };
+
+  if(fileInput){
+    const reader = new FileReader();
+    reader.onload = (ev)=>{
+      entry.file = {
+        name: fileInput.name,
+        url: ev.target.result
+      };
+      saveEntry(section, entry);
+      loadSection(section);
+    };
+    reader.readAsDataURL(fileInput);
+  } else {
+    saveEntry(section, entry);
+    loadSection(section);
+  }
+});
+
+function saveEntry(section, entry){
+  const key = getSectionKey(section);
+  const entries = JSON.parse(localStorage.getItem(key) || "[]");
   entries.push(entry);
-  localStorage.setItem(pageKey, JSON.stringify(entries));
+  localStorage.setItem(key, JSON.stringify(entries));
 }
 
-if(addEntryBtn){
-  addEntryBtn.addEventListener("click", ()=>{
-    if(!isAdmin){
-      alert("Vous devez être connecté en admin pour ajouter une entrée !");
-      return;
-    }
-    const txt=newEntryInput.value.trim();
-    const file=newImageInput.files[0];
-    if(!txt && !file){ alert("Écris quelque chose ou ajoute une image !"); return; }
-    const entry={text:txt,image:null,date:new Date().toLocaleString()};
-    if(file){
-      const reader=new FileReader();
-      reader.onload=(ev)=>{ entry.image=ev.target.result; saveEntry(entry); newEntryInput.value=""; newImageInput.value=""; loadEntries(); };
-      reader.readAsDataURL(file);
-    } else { saveEntry(entry); newEntryInput.value=""; newImageInput.value=""; loadEntries(); }
-  });
-}
-
-// Charger les entrées au démarrage
-loadEntries();
 </script>
 </body>
 </html>
