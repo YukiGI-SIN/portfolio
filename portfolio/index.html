@@ -240,14 +240,6 @@ header.top .title-container {
     <button type="button" id="admin-cancel" class="ui amber" style="width: 100%; margin-top: 10px;">Annuler</button>
   </form>
 </section>
-<section id="admin-panel" class="panel info-page" style="display:none; max-width: 500px; margin: 20px auto;">
-  <h3>Panneau Admin</h3>
-  <textarea id="new-entry" rows="4" style="width:100%;" placeholder="Écris ton entrée du journal..."></textarea><br>
-  <input type="file" id="new-image" accept="image/*"><br>
-  <button id="add-entry" class="ui red" style="margin-top:10px;">Ajouter au Journal</button>
-  <button id="admin-logout" class="ui amber" style="margin-top:10px;">Déconnexion</button>
-</section>
-
 
 
   <!-- Footer -->
@@ -377,31 +369,102 @@ document.getElementById("back-projets-real").addEventListener("click", backToMai
 document.getElementById("back-dossier").addEventListener("click", backToMain);
 document.getElementById("back-contact").addEventListener("click", backToMain);
 
-const adminPanel = document.getElementById("admin-panel");
-const adminLogoutBtn = document.getElementById("admin-logout");
+Bouton Admin
+adminBtn.addEventListener("click", () => {
+hideAll();
+adminLoginSection.style.display = "block";
+});
 
+
+adminCancelBtn.addEventListener("click", () => {
+backToMain();
+adminForm.reset();
+});
+
+
+// Connexion
 adminForm.addEventListener("submit", (e) => {
-  e.preventDefault();
-  const username = document.getElementById("admin-username").value.trim();
-  const password = document.getElementById("admin-password").value.trim();
+e.preventDefault();
+const username = document.getElementById("admin-username").value.trim();
+const password = document.getElementById("admin-password").value.trim();
 
-  if (username === adminUsername && password === adminPassword) {
-    alert("Connexion réussie !");
-    adminLoginSection.style.display = "none";
-    adminPanel.style.display = "block"; // ✅ on affiche le panneau admin
-    adminForm.reset();
-  } else {
-    alert("Nom d’utilisateur ou mot de passe incorrect.");
-  }
+
+if (username === adminUsername && password === adminPassword) {
+alert("Connexion réussie !");
+adminLoginSection.style.display = "none";
+adminPanel.style.display = "block"; // ✅ panneau admin visible
+adminForm.reset();
+} else {
+alert("Nom d’utilisateur ou mot de passe incorrect.");
+}
 });
 
-// Déconnexion admin
+
+// Déconnexion
 adminLogoutBtn.addEventListener("click", () => {
-  adminPanel.style.display = "none";
-  backToMain();
+adminPanel.style.display = "none";
+backToMain();
 });
 
-  
+
+// Ajout d’entrées dans le journal
+addEntryBtn.addEventListener("click", () => {
+const entryText = newEntryInput.value.trim();
+const file = newImageInput.files[0];
+
+
+if (!entryText && !file) {
+alert("Écris quelque chose ou ajoute une image !");
+return;
+}
+
+
+const entryDiv = document.createElement("div");
+entryDiv.innerHTML = `<p>${entryText}</p>`;
+
+
+if (file) {
+const reader = new FileReader();
+reader.onload = function(e) {
+const img = document.createElement("img");
+img.src = e.target.result;
+img.width = 400;
+entryDiv.appendChild(img);
+saveEntry(entryText, e.target.result);
+};
+reader.readAsDataURL(file);
+} else {
+  saveEntry(entryText, null);
+}
+
+
+journalEntries.appendChild(entryDiv);
+newEntryInput.value = "";
+newImageInput.value = "";
+});
+
+
+// Sauvegarde localStorage
+function saveEntry(text, imageData) {
+let entries = JSON.parse(localStorage.getItem("journalEntries") || "[]");
+entries.push({ text, image: imageData });
+localStorage.setItem("journalEntries", JSON.stringify(entries));
+}
+
+
+// Chargement des entrées
+window.addEventListener("load", () => {
+let entries = JSON.parse(localStorage.getItem("journalEntries") || "[]");
+entries.forEach(entry => {
+const entryDiv = document.createElement("div");
+entryDiv.innerHTML = `<p>${entry.text}</p>`;
+if (entry.image) {
+const img = document.createElement("img");
+img.src = entry.image;
+img.width = 400;
+entryDiv.appendChild(img);
+}
+journalEntries.appendChild(entryDiv);
 });
 
 // Affiche la page Basket quand on clique sur le bouton dans Projets Réalisés
@@ -446,21 +509,6 @@ backSIN.addEventListener('click', () => {
   pageSIN.style.display = 'none';
   pageProjetsReal.style.display = 'block';
 });
-// Gestion du formulaire admin
-adminForm.addEventListener("submit", (e) => {
-  e.preventDefault();
-  const username = document.getElementById("admin-username").value.trim();
-  const password = document.getElementById("admin-password").value.trim();
-
-  if (username === adminUsername && password === adminPassword) {
-    alert("Connexion réussie !");
-
-    adminLoginSection.style.display = "none";
-    
-
-  } else {
-    alert("Nom d’utilisateur ou mot de passe incorrect.");
-  }
 });
 </script>
 </body>
