@@ -240,6 +240,14 @@ header.top .title-container {
     <button type="button" id="admin-cancel" class="ui amber" style="width: 100%; margin-top: 10px;">Annuler</button>
   </form>
 </section>
+<section id="admin-panel" class="panel info-page" style="display:none;">
+  <h3>Panneau Admin</h3>
+  <textarea id="new-entry" placeholder="Écris une nouvelle entrée..."></textarea><br>
+  <input type="file" id="new-image"><br>
+  <button id="add-entry" class="ui green">Ajouter au journal</button>
+  <button id="admin-logout" class="ui red">Déconnexion</button>
+  <div id="journal-entries"></div>
+</section>
 
 
   <!-- Footer -->
@@ -369,119 +377,137 @@ document.getElementById("back-projets-real").addEventListener("click", backToMai
 document.getElementById("back-dossier").addEventListener("click", backToMain);
 document.getElementById("back-contact").addEventListener("click", backToMain);
 
-const adminPassword = "0209TH";
-const adminPanel = document.getElementById("admin-panel");
-const adminLogoutBtn = document.getElementById("admin-logout");
-const newEntryInput = document.getElementById("new-entry");
-const newImageInput = document.getElementById("new-image");
-const addEntryBtn = document.getElementById("add-entry");
-const journalEntries = document.getElementById("journal-entries");
+const ADMIN_USER = 'Hiddleston';
+  const ADMIN_PASS = '0209TH';
 
+  // ---------- éléments ----------
+  const mainGrid = document.getElementById('main-grid');
+  const infoPages = Array.from(document.querySelectorAll('.info-page'));
+  const adminBtn = document.getElementById('admin-btn');
+  const adminLogin = document.getElementById('admin-login');
+  const adminForm = document.getElementById('admin-form');
+  const adminCancel = document.getElementById('admin-cancel');
+  const adminPanel = document.getElementById('admin-panel');
+  const adminLogout = document.getElementById('admin-logout');
 
-function showPage(id) {
-hideAll();
-document.getElementById(id).style.display = "block";
-}
+  const addEntryBtn = document.getElementById('add-entry');
+  const newEntryInput = document.getElementById('new-entry');
+  const newImageInput = document.getElementById('new-image');
+  const journalEntriesContainer = document.getElementById('journal-entries');
 
+  // other nav buttons
+  const btnToggle = document.getElementById('btn-toggle-system');
+  const btnEngine = document.getElementById('btn-engine');
+  const btnFutur = document.getElementById('btn-turbo-boost');
+  const btnJournal = document.getElementById('btn-demarrage');
+  const btnProjetsReal = document.getElementById('btn-turbo');
+  const btnAnalyse = document.getElementById('btn-analyse');
+  const btnContact = document.getElementById('btn-autopilot');
 
-// Bouton Admin
-adminBtn.addEventListener("click", () => {
-hideAll();
-adminLoginSection.style.display = "block";
-});
+  // back buttons
+  document.getElementById('back-sti2d').addEventListener('click', showMain);
+  document.getElementById('back-projets').addEventListener('click', showMain);
+  document.getElementById('back-futur').addEventListener('click', showMain);
+  document.getElementById('back-journal').addEventListener('click', showMain);
 
+  // Page navigation helpers
+  function hideAll() {
+    mainGrid.style.display = 'none';
+    infoPages.forEach(p => p.style.display = 'none');
+  }
+  function showMain(){
+    mainGrid.style.display = 'grid';
+    infoPages.forEach(p => p.style.display = 'none');
+  }
+  function showPage(id) {
+    hideAll();
+    const el = document.getElementById(id);
+    if(el) el.style.display = 'block';
+  }
+adminForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const user = document.getElementById('admin-username').value.trim();
+    const pass = document.getElementById('admin-password').value.trim();
+    if(user === ADMIN_USER && pass === ADMIN_PASS){
+      adminForm.reset();
+      hideAll();
+      adminPanel.style.display = 'block';
+    } else {
+      alert('Identifiants incorrects');
+    }
+  });
 
-adminCancelBtn.addEventListener("click", () => {
-backToMain();
-adminForm.reset();
-});
+  // ---------- Admin logout ----------
+  adminLogout.addEventListener('click', () => {
+    adminPanel.style.display = 'none';
+    showMain();
+  });
 
+  // ---------- Journal (localStorage) ----------
+  function loadEntries(){
+    journalEntriesContainer.innerHTML = '';
+    const entries = JSON.parse(localStorage.getItem('journalEntries') || '[]');
+    if(entries.length === 0){
+      journalEntriesContainer.innerHTML = '<p style="opacity:.8">Aucune entrée pour le moment.</p>';
+      return;
+    }
+    entries.slice().reverse().forEach(entry => { // latest first
+      const div = document.createElement('div');
+      div.style.marginBottom = '12px';
+      div.innerHTML = `<div style="opacity:.8;font-size:12px;margin-bottom:6px">${escapeHtml(entry.date||'')}</div><p>${escapeHtml(entry.text||'')}</p>`;
+      if(entry.image){
+        const img = document.createElement('img');
+        img.src = entry.image;
+        img.alt = 'image';
+        img.style.maxWidth = '100%';
+        img.style.borderRadius = '8px';
+        img.style.marginTop = '8px';
+        div.appendChild(img);
+      }
+      journalEntriesContainer.appendChild(div);
+    });
+  }
 
-// Connexion
-adminForm.addEventListener("submit", (e) => {
-e.preventDefault();
-const username = document.getElementById("admin-username").value.trim();
-const password = document.getElementById("admin-password").value.trim();
+  function saveEntry(entry){
+    const entries = JSON.parse(localStorage.getItem('journalEntries') || '[]');
+    entries.push(entry);
+    localStorage.setItem('journalEntries', JSON.stringify(entries));
+  }
 
+  addEntryBtn.addEventListener('click', () => {
+    const txt = newEntryInput.value.trim();
+    const file = newImageInput.files && newImageInput.files[0];
+    if(!txt && !file){ alert('Écris quelque chose ou ajoute une image !'); return; }
+    const entry = { text: txt, image: null, date: new Date().toLocaleString() };
+    if(file){
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        entry.image = ev.target.result;
+        saveEntry(entry);
+        newEntryInput.value = '';
+        newImageInput.value = '';
+        showPage('page-journal');
+        loadEntries();
+      };
+      reader.readAsDataURL(file);
+    } else {
+      saveEntry(entry);
+      newEntryInput.value = '';
+      newImageInput.value = '';
+      showPage('page-journal');
+      loadEntries();
+    }
+  });
 
-if (username === adminUsername && password === adminPassword) {
-alert("Connexion réussie !");
-adminLoginSection.style.display = "none";
-adminPanel.style.display = "block"; // ✅ panneau admin visible
-adminForm.reset();
-} else {
-alert("Nom d’utilisateur ou mot de passe incorrect.");
-}
-});
+  // helper: escape HTML
+  function escapeHtml(text){
+    const d = document.createElement('div'); d.textContent = text; return d.innerHTML;
+  }
 
-
-// Déconnexion
-adminLogoutBtn.addEventListener("click", () => {
-adminPanel.style.display = "none";
-backToMain();
-});
-
-
-// Ajout d’entrées dans le journal
-addEntryBtn.addEventListener("click", () => {
-const entryText = newEntryInput.value.trim();
-const file = newImageInput.files[0];
-
-
-if (!entryText && !file) {
-alert("Écris quelque chose ou ajoute une image !");
-return;
-}
-
-
-const entryDiv = document.createElement("div");
-entryDiv.innerHTML = `<p>${entryText}</p>`;
-
-
-if (file) {
-const reader = new FileReader();
-reader.onload = function(e) {
-const img = document.createElement("img");
-img.src = e.target.result;
-img.width = 400;
-entryDiv.appendChild(img);
-saveEntry(entryText, e.target.result);
-};
-reader.readAsDataURL(file);
-} else {
-saveEntry(entryText, null);
-}
-
-
-journalEntries.appendChild(entryDiv);
-newEntryInput.value = "";
-newImageInput.value = "";
-});
-
-
-// Sauvegarde localStorage
-function saveEntry(text, imageData) {
-let entries = JSON.parse(localStorage.getItem("journalEntries") || "[]");
-entries.push({ text, image: imageData });
-localStorage.setItem("journalEntries", JSON.stringify(entries));
-}
-
-
-// Chargement des entrées
-window.addEventListener("load", () => {
-let entries = JSON.parse(localStorage.getItem("journalEntries") || "[]");
-entries.forEach(entry => {
-const entryDiv = document.createElement("div");
-entryDiv.innerHTML = `<p>${entry.text}</p>`;
-if (entry.image) {
-const img = document.createElement("img");
-img.src = entry.image;
-img.width = 400;
-entryDiv.appendChild(img);
-}
-journalEntries.appendChild(entryDiv);
-});
-});
+  // load saved entries on start
+  loadEntries();
+  // show main by default
+  showMain();
 
 // Affiche la page Basket quand on clique sur le bouton dans Projets Réalisés
 document.getElementById("btn-basket-project").addEventListener("click", () => {
