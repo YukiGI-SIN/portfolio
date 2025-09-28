@@ -240,14 +240,6 @@ header.top .title-container {
     <button type="button" id="admin-cancel" class="ui amber" style="width: 100%; margin-top: 10px;">Annuler</button>
   </form>
 </section>
-<section id="admin-panel" class="panel info-page" style="display:none;">
-  <h3>Panneau Admin</h3>
-  <textarea id="new-entry" placeholder="Écris une nouvelle entrée..."></textarea><br>
-  <input type="file" id="new-image"><br>
-  <button id="add-entry" class="ui green">Ajouter au journal</button>
-  <button id="admin-logout" class="ui red">Déconnexion</button>
-  <div id="journal-entries"></div>
-</section>
 
 
   <!-- Footer -->
@@ -322,32 +314,23 @@ header.top .title-container {
   <button class="ui cyan" id="back-contact">RETOUR</button>
 </section>
 
-<!-- Formulaire Admin -->
+</div>
 <div id="admin-panel" style="display:none;">
-  <h2>Admin</h2>
-  <form id="admin-content-form">
-    <label>Choisir rubrique :</label>
-    <select id="target-section">
-      <option value="journal">Journal de bord</option>
-       <div id="entries-journal"></div>
-      <option value="projets">Projets:Réalisations</option>
-       <div id="entries-projets"></div>
-      <option value="dossier">Dossier technique</option>
-       <div id="entries-dossier"></div>
-    </select><br><br>
-
-    <label>Ajouter du code HTML :</label><br>
-    <textarea id="html-content" rows="5" cols="50" placeholder="Écris ton HTML ici"></textarea><br><br>
-
-    <label>Ajouter un fichier (image, PDF...) :</label><br>
-    <input type="file" id="file-content" /><br><br>
-
-    <button type="submit">Ajouter</button>
-  </form>
+  <h2>Admin Panel</h2>
+  <select id="admin-section">
+    <option value="journal">Journal de bord</option>
+    <option value="projets">Projets</option>
+    <option value="dossier">Dossier technique</option>
+  </select>
+  <textarea id="admin-html" placeholder="Code HTML / texte"></textarea>
+  <input type="file" id="admin-file">
+  <button id="admin-add-entry">Ajouter</button>
+  <button id="admin-logout">Déconnexion</button>
 </div>
+<div id="entries-journal"></div>
+<div id="entries-projets"></div>
+<div id="entries-dossier"></div>
 
-
-</div>
 
 <script>
 // ---------- Horloge ----------
@@ -359,8 +342,12 @@ function tickClock(){
 }
 setInterval(tickClock, 1000); tickClock();
 
+// ---------- Navigation ----------
+const mainPanels = document.querySelectorAll(".panel:not(.info-page)");
+function showPage(pageId){ mainPanels.forEach(p=>p.style.display="none"); document.querySelectorAll(".info-page").forEach(p=>p.style.display="none"); document.getElementById(pageId).style.display="block"; }
+function backToMain(){ mainPanels.forEach(p=>p.style.display="block"); document.querySelectorAll(".info-page").forEach(p=>p.style.display="none"); }
 
-// ---------- Audio + GIF ----------
+// ---------- Audio ----------
 const audios = {
   sti2d:new Audio("Audios/STI2D.mp3"),
   projets:new Audio("Audios/MyProjects.mp3"),
@@ -378,123 +365,95 @@ function playAudioWithGif(audio){
   audio.onended = ()=>{ gif.src = "Gifs/static.png"; };
 }
 
-// ---------- Boutons contenu ----------
+// ---------- Boutons ----------
 document.getElementById("btn-toggle-system").addEventListener("click", ()=>{ showPage("page-sti2d"); playAudioWithGif(audios.sti2d); });
 document.getElementById("btn-engine").addEventListener("click", ()=>{ showPage("page-projets"); playAudioWithGif(audios.projets); });
 document.getElementById("btn-turbo-boost").addEventListener("click", ()=>{ showPage("page-futur"); playAudioWithGif(audios.futur); });
+document.getElementById("back-sti2d").addEventListener("click", backToMain);
+document.getElementById("back-projets").addEventListener("click", backToMain);
+document.getElementById("back-futur").addEventListener("click", backToMain);
+
 document.getElementById("btn-demarrage").addEventListener("click", ()=>{ showPage("page-journal"); playAudioWithGif(audios.journal); });
 document.getElementById("btn-turbo").addEventListener("click", ()=>{ showPage("page-projets-real"); playAudioWithGif(audios.projetsReal); });
 document.getElementById("btn-analyse").addEventListener("click", ()=>{ showPage("page-dossier"); playAudioWithGif(audios.dossier); });
 document.getElementById("btn-autopilot").addEventListener("click", ()=>{ showPage("page-contact"); playAudioWithGif(audios.contact); });
+document.getElementById("back-journal").addEventListener("click", backToMain);
 
-// ---------- Boutons retour ----------
-["back-sti2d","back-projets","back-futur","back-journal",
- "back-projets-real","back-dossier","back-contact",
- "back-basket","back-SIN"].forEach(id=>{
-   const el=document.getElementById(id);
-   if(el) el.addEventListener("click", showMain);
-});
+document.getElementById("back-projets-real").addEventListener("click", backToMain);
+document.getElementById("back-dossier").addEventListener("click", backToMain);
+document.getElementById("back-contact").addEventListener("click", backToMain);
 
-// Statut admin
-let isAdmin = false;
+// ---------- Admin ----------
+const ADMIN_USER = "Hiddleston";
+const ADMIN_PASS = "0209TH";
 
-// Connexion Admin
 const adminBtn = document.getElementById("admin-btn");
 const adminForm = document.getElementById("admin-form");
 const adminCancel = document.getElementById("admin-cancel");
 const adminPanel = document.getElementById("admin-panel");
-const adminLogout = document.getElementById("admin-logout");
-
-const ADMIN_USER = "Hiddleston";
-const ADMIN_PASS = "0209TH";
 
 adminBtn.addEventListener("click", ()=>{ showPage("admin-login"); });
-adminCancel.addEventListener("click", ()=>{ showMain(); adminForm.reset(); });
+adminCancel.addEventListener("click", ()=>{ backToMain(); adminForm.reset(); });
 
 adminForm.addEventListener("submit", (e)=>{
   e.preventDefault();
   const user = document.getElementById("admin-username").value.trim();
   const pass = document.getElementById("admin-password").value.trim();
-  if(user === ADMIN_USER && pass === ADMIN_PASS){
-    isAdmin = true;
+  if(user===ADMIN_USER && pass===ADMIN_PASS){
+    alert("Connexion réussie !");
     adminForm.reset();
     showPage("admin-panel");
-  } else {
-    alert("Nom d’utilisateur ou mot de passe incorrect.");
-  }
+  } else { alert("Nom d’utilisateur ou mot de passe incorrect."); }
 });
-if(adminLogout){
-  adminLogout.addEventListener("click", ()=>{ 
-    isAdmin = false;
-    adminPanel.style.display = "none"; 
-    showMain(); 
+
+document.getElementById("admin-logout").addEventListener("click", ()=>{
+  showMain();
+});
+
+// ---------- Gestion contenu admin ----------
+function escapeHtml(text){ const d=document.createElement("div"); d.textContent=text; return d.innerHTML; }
+
+function loadContent(){
+  ["journal","projets","dossier"].forEach(section=>{
+    const container = document.getElementById("entries-" + section);
+    container.innerHTML = "";
+    const entries = JSON.parse(localStorage.getItem("entries-" + section) || "[]");
+    if(entries.length===0){ container.innerHTML = "<p>Aucune entrée.</p>"; return; }
+    entries.slice().reverse().forEach(entry=>{
+      const div = document.createElement("div");
+      div.innerHTML = `<div style="font-size:12px;opacity:.7">${escapeHtml(entry.date||"")}</div>${entry.html||""}`;
+      container.appendChild(div);
+    });
   });
 }
 
-// Stockage & affichage contenu admin
-function getSectionKey(section){
-  return "section_" + section;
-}
+document.getElementById("admin-add-entry").addEventListener("click", ()=>{
+  const section = document.getElementById("admin-section").value; // journal/projets/dossier
+  const htmlContent = document.getElementById("admin-html").value;
+  const fileInput = document.getElementById("admin-file").files[0];
+  if(!htmlContent && !fileInput){ alert("Ajoute du contenu ou un fichier."); return; }
 
-function loadSection(section){
-  const container = document.getElementById("entries-" + section);
-  if(!container) return;
-  container.innerHTML = "";
-  const entries = JSON.parse(localStorage.getItem(getSectionKey(section)) || "[]");
-  if(entries.length === 0){
-    container.innerHTML = "<p>Aucune entrée pour le moment.</p>";
-    return;
-  }
-  entries.forEach(entry => {
-    const div = document.createElement("div");
-    div.innerHTML = entry.html || "";
-    if(entry.file){
-      const link = document.createElement("a");
-      link.href = entry.file.url;
-      link.target = "_blank";
-      link.textContent = entry.file.name;
-      div.appendChild(document.createElement("br"));
-      div.appendChild(link);
-    }
-    container.appendChild(div);
-  });
-}
-
-document.getElementById("admin-content-form").addEventListener("submit", e=>{
-  e.preventDefault();
-  if(!isAdmin){
-    alert("Vous devez être connecté en admin !");
-    return;
-  }
-  const section = document.getElementById("target-section").value;
-  const htmlContent = document.getElementById("html-content").value;
-  const fileInput = document.getElementById("file-content").files[0];
-
-  const entry = { html: htmlContent, file: null };
+  const entry = { html: htmlContent, date: new Date().toLocaleString() };
 
   if(fileInput){
     const reader = new FileReader();
     reader.onload = (ev)=>{
-      entry.file = {
-        name: fileInput.name,
-        url: ev.target.result
-      };
+      entry.html += `<br><a href="${ev.target.result}" target="_blank">📎 Fichier ajouté</a>`;
       saveEntry(section, entry);
-      loadSection(section);
     };
     reader.readAsDataURL(fileInput);
-  } else {
-    saveEntry(section, entry);
-    loadSection(section);
-  }
+  } else { saveEntry(section, entry); }
 });
 
 function saveEntry(section, entry){
-  const key = getSectionKey(section);
-  const entries = JSON.parse(localStorage.getItem(key) || "[]");
+  const entries = JSON.parse(localStorage.getItem("entries-" + section) || "[]");
   entries.push(entry);
-  localStorage.setItem(key, JSON.stringify(entries));
+  localStorage.setItem("entries-" + section, JSON.stringify(entries));
+  loadContent();
 }
+
+// Charger le contenu au démarrage
+loadContent();
 
 </script>
 </body>
