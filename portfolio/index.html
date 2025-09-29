@@ -440,7 +440,7 @@ adminForm.addEventListener("submit", (e)=>{
 });
 
 document.getElementById("admin-logout").addEventListener("click", ()=>{
-  showMain();
+  backToMain(); // ✅ ça affiche les panneaux principaux
 });
 
 // ---------- Gestion contenu admin ----------
@@ -500,7 +500,6 @@ document.body.classList.add("locked");
 document.getElementById("site-password").addEventListener("keydown", function(e){
   if (e.key === "Enter") checkPassword();
 });
-
 </script>
 </body>
 </html>
