@@ -129,12 +129,36 @@ header.top .title-container {
   color: #ff2e2e; /* rouge vif */
   font-weight: 800; /* facultatif pour garder le style */
 }
+body.locked {
+  overflow: hidden;
+}
+body.locked .wrap,
+body.locked .foot,
+body.locked #admin-panel,
+body.locked .panel {
+  pointer-events: none;
+  user-select: none;
+  opacity: 0.2; /* Optionnel : effet grisé du site derrière */
+}
+#lockscreen {
+  pointer-events: auto;
+  user-select: auto;
+}
+
 
 @media(max-width:1100px){.grid{grid-template-columns:260px 1fr;}.right{grid-column:1 / -1;}}
 @media(max-width:720px){.grid{grid-template-columns:1fr;}.btns.center{grid-template-columns:repeat(2,1fr);}}
 </style>
 </head>
 <body>
+  
+  
+  <div id="lockscreen" style="position:fixed;top:0;left:0;width:100%;height:100%;background:#0b0e12;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:9999;">
+  <h2 style="color:#fff;">🔒 Accès protégé</h2>
+  <input type="password" id="site-password" placeholder="Mot de passe..." style="padding:10px;border-radius:6px;border:1px solid #ccc;margin:10px 0;">
+  <button onclick="checkPassword()" class="ui red">ENTRER</button>
+  <p id="error-msg" style="color:red;display:none;">Mot de passe incorrect.</p>
+  </div>
 
 
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -292,9 +316,10 @@ header.top .title-container {
 
 <section class="panel info-page" id="page-SIN" style="display:none;">
   <h3>SIN</h3>
-  <button class="ui amber" id="btn-basket-project">Entraînement TP</button>
+  <button class="ui amber" id="btn-TP">TP 1</button>
   <button class="ui cyan" id="back-SIN">RETOUR</button>
 </section>
+
 
 
 <section class="panel info-page" id="page-basket" style="display:none;">
@@ -409,7 +434,6 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("back-basket").addEventListener("click", () => {
     showPage("page-projets-real");
   });
-
    document.getElementById("back-TP").addEventListener("click", () => {
     showPage("page-projets-real");
   });
@@ -482,11 +506,27 @@ function saveEntry(section, entry){
   loadContent();
 }
 
+
+loadContent();
+function checkPassword() {
+  const input = document.getElementById("site-password").value;
+  const password = "Stark"; 
+  if (input === password) {
+    document.getElementById("lockscreen").style.display = "none";
+    document.body.classList.remove("locked"); 
+  } else {
+    document.getElementById("error-msg").style.display = "block";
+  }
+}
 document.getElementById("admin-logout").addEventListener("click", ()=>{
   backToMain(); 
   document.getElementById("admin-panel").style.display = "none"; 
 });
 
+document.body.classList.add("locked");
+document.getElementById("site-password").addEventListener("keydown", function(e){
+  if (e.key === "Enter") checkPassword();
+});
 </script>
 </body>
 </html>
