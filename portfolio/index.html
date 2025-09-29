@@ -416,7 +416,24 @@ document.getElementById("back-projets-real").addEventListener("click", backToMai
 document.getElementById("back-dossier").addEventListener("click", backToMain);
 document.getElementById("back-contact").addEventListener("click", backToMain);
 
-// ---------- Admin ----------
+document.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("btn-SIN").addEventListener("click", () => {
+    showPage("page-SIN");
+  });
+
+  document.getElementById("btn-basket-project").addEventListener("click", () => {
+    showPage("page-basket");
+  });
+
+  document.getElementById("back-SIN").addEventListener("click", () => {
+    backToMain();
+  });
+
+  document.getElementById("back-basket").addEventListener("click", () => {
+    backToMain();
+  });
+});
+
 const ADMIN_USER = "Hiddleston";
 const ADMIN_PASS = "0209TH";
 
@@ -440,10 +457,9 @@ adminForm.addEventListener("submit", (e)=>{
 });
 
 document.getElementById("admin-logout").addEventListener("click", ()=>{
-  backToMain(); // ✅ ça affiche les panneaux principaux
+  backToMain(); 
 });
 
-// ---------- Gestion contenu admin ----------
 function escapeHtml(text){ const d=document.createElement("div"); d.textContent=text; return d.innerHTML; }
 
 function loadContent(){
