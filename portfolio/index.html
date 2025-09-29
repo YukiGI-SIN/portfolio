@@ -416,23 +416,21 @@ document.getElementById("back-projets-real").addEventListener("click", backToMai
 document.getElementById("back-dossier").addEventListener("click", backToMain);
 document.getElementById("back-contact").addEventListener("click", backToMain);
 
-document.addEventListener("DOMContentLoaded", () => {
-  document.getElementById("btn-SIN").addEventListener("click", () => {
-    showPage("page-SIN");
-  });
-
-  document.getElementById("btn-basket-project").addEventListener("click", () => {
-    showPage("page-basket");
-  });
-
-  document.getElementById("back-SIN").addEventListener("click", () => {
-    backToMain();
-  });
-
-  document.getElementById("back-basket").addEventListener("click", () => {
-    backToMain();
-  });
+document.getElementById("back-SIN").addEventListener("click", () => {
+  document.getElementById("page-SIN").style.display = "none";
+  document.getElementById("page-projets-real").style.display = "block";
 });
+
+document.getElementById("back-basket").addEventListener("click", () => {
+  document.getElementById("page-basket").style.display = "none";
+  document.getElementById("page-projets-real").style.display = "block";
+});
+
+document.getElementById("back-projets-real").addEventListener("click", () => {
+  document.getElementById("page-projets-real").style.display = "none";
+  document.querySelector(".panel.center").style.display = "block";
+});
+
 
 const ADMIN_USER = "Hiddleston";
 const ADMIN_PASS = "0209TH";
