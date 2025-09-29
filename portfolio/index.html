@@ -506,27 +506,11 @@ function saveEntry(section, entry){
   loadContent();
 }
 
-
-loadContent();
-function checkPassword() {
-  const input = document.getElementById("site-password").value;
-  const password = "Stark"; 
-  if (input === password) {
-    document.getElementById("lockscreen").style.display = "none";
-    document.body.classList.remove("locked"); 
-  } else {
-    document.getElementById("error-msg").style.display = "block";
-  }
-}
 document.getElementById("admin-logout").addEventListener("click", ()=>{
   backToMain(); 
   document.getElementById("admin-panel").style.display = "none"; 
 });
 
-document.body.classList.add("locked");
-document.getElementById("site-password").addEventListener("keydown", function(e){
-  if (e.key === "Enter") checkPassword();
-});
 </script>
 </body>
 </html>
