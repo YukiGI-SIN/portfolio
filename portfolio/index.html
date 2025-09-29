@@ -497,6 +497,10 @@ function checkPassword() {
     document.getElementById("error-msg").style.display = "block";
   }
 }
+document.getElementById("admin-logout").addEventListener("click", ()=>{
+  backToMain(); 
+  document.getElementById("admin-panel").style.display = "none"; 
+});
 
 document.body.classList.add("locked");
 document.getElementById("site-password").addEventListener("keydown", function(e){
