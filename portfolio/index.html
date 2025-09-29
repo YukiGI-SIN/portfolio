@@ -492,10 +492,12 @@ function checkPassword() {
   const password = "Stark"; 
   if (input === password) {
     document.getElementById("lockscreen").style.display = "none";
+    document.body.classList.remove("locked"); 
   } else {
     document.getElementById("error-msg").style.display = "block";
   }
 }
+
 document.body.classList.add("locked");
 document.getElementById("site-password").addEventListener("keydown", function(e){
   if (e.key === "Enter") checkPassword();
